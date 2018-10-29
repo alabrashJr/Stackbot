@@ -1,0 +1,34 @@
+﻿- Format: 7zipped
+- Files:
+	- **tags**.xml
+			- Id
+			- TagName
+      - Count
+			- WikiPostId
+	- **comments**.xml
+			- Id
+			- PostId
+			- Score
+			- Text, e.g.: "@Stu Thompson: Seems possible to me - why not try it?"
+	- **posts**.xml
+			- Id
+			- PostTypeId
+				 - 1: Question
+				 - 2: Answer
+			- ParentID (only present if PostTypeId is 2)
+			- AcceptedAnswerId (only present if PostTypeId is 1)
+			- Score
+			- ViewCount
+			- Body
+			- Title=
+			- Tags=
+			- AnswerCount
+			- CommentCount
+			- FavoriteCount
+	- **postlinks**.xml  # Useful to detect duplicated and linked questions
+		- Id
+		- PostId
+		- RelatedPostId
+		- PostLinkTypeId
+			- 1: Linked
+			- 3: Duplicate
