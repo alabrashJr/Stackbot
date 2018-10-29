@@ -38,11 +38,11 @@ usage: initialize_db.py [-h] -p FILES_PATH [-n DB_NAME]
 arguments:
   -h, --help            show this help message and exit
   -p FILES_PATH, --files-path FILES_PATH
-                        Path of the files to be processed
+                        Path of the data dumps files
   -n DB_NAME, --db-name DB_NAME
-                        Path of the file to be written to
+                        Name of mongo database default (Stackbot)
   -f FILES_LIST [FILES_LIST ...], --files-list FILES_LIST [FILES_LIST ...]
-                        List of the files to be parsed and added to db
+                        List of the files to be parsed and added to database
 ```
 
 
