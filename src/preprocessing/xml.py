@@ -3,23 +3,12 @@ from xml.etree import ElementTree
 import json
 import csv
 
-def attributes_to_dict(line):
-    """Parses xml row into python dict"""
-    try:
-        parsed = etree.fromstring(line)
-        ret = {}
-        for key in parsed.keys():
-            ret[key] = parsed.get(key)
-    except(etree.XMLSyntaxError):
-        print('Error encountered while trying to parse: ',line)
-    return ret
-
 class StreamArray(list):
     """
     Converts a generator into a list object that can be json serializable
     while still retaining the iterative nature of a generator.
 
-    IE. It converts it to a list without having to exhaust the generator
+    It converts it to a list without having to exhaust the generator
     and keep it's contents in memory.
     """
     def __init__(self, generator):
@@ -38,6 +27,17 @@ class StreamArray(list):
         be parsed
         """
         return self._len
+
+def attributes_to_dict(line):
+    """Parses xml row into python dict"""
+    try:
+        parsed = etree.fromstring(line)
+        ret = {}
+        for key in parsed.keys():
+            ret[key] = parsed.get(key)
+    except(etree.XMLSyntaxError):
+        print('Error encountered while trying to parse: ',line)
+    return ret
 
 def iterate_over_xml(xmlfile):
     """Iterates over xml files rows and yields dict of rows attributes"""
