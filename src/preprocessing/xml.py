@@ -2,6 +2,7 @@ from xml import etree
 from xml.etree import ElementTree
 import json
 import csv
+import pymongo
 
 class StreamArray(list):
     """
@@ -66,3 +67,19 @@ def xml_to_csv(xmlfile, outfile, list_of_headers):
         writer.writeheader()
         for row in iterate_over_xml(xmlfile):
             writer.writerow(row)
+
+def xml_to_collection(xml_file, db, collection_name, index=None):
+    """Reads xml rows from xml files and add them to mongodb collection"""
+    collection = db[collection_name]
+    if index is not None:
+        collection.create_index([(index, pymongo.ASCENDING)],unique=True)
+    # OPTIMIZE: use batches
+    buffer = []
+    for row in iterate_over_xml(xmlfile):
+        buffer.append(row)
+        if len(buffer) > 10000:
+            collection.insert_many(buffer)
+            buffer = []
+    if len(buffer) != 0:
+        collection.insert_many(buffer)
+        buffer = []

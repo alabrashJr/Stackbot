@@ -19,6 +19,7 @@ if __name__ == '__main__':
         sys.exit(1)
 
     print('starting processing:', args['input_file'], 'as', args['output_format'], 'file')
+
     if args['output_format'] == 'json':
         xml_to_json(args['input_file'], args['output_file'])
     elif args['output_format'] == 'csv':
