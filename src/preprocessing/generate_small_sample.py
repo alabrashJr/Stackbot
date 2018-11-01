@@ -1,4 +1,4 @@
-from preprocessing.xml import iterate_over_xml
+from parsers import iterate_over_xml
 from pymongo import MongoClient
 import sys
 

@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from preprocessing.xml import xml_to_collection
+from parsing import xml_to_collection
 import pymongo
 import argparse
 

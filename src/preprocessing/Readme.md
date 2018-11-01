@@ -1,6 +1,6 @@
-## **Preprocessing package**
+## parsing.py
 
-Contains some functions used for cleaning and parsing xml data dumps 
+Contains some functions used for cleaning and parsing xml data dumps
 
 ## parse_xml_rows.py
 
@@ -44,6 +44,3 @@ arguments:
   -f FILES_LIST [FILES_LIST ...], --files-list FILES_LIST [FILES_LIST ...]
                         List of the files to be parsed and added to db
 ```
-
-
-

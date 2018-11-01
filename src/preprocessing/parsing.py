@@ -71,15 +71,16 @@ def xml_to_csv(xmlfile, outfile, list_of_headers):
 def xml_to_collection(xml_file, db, collection_name, index=None):
     """Reads xml rows from xml files and add them to mongodb collection"""
     collection = db[collection_name]
-    if index is not None:
-        collection.create_index([(index, pymongo.ASCENDING)],unique=True)
     # OPTIMIZE: use batches
     buffer = []
-    for row in iterate_over_xml(xmlfile):
+    for row in iterate_over_xml(xml_file):
         buffer.append(row)
-        if len(buffer) > 10000:
+        if len(buffer) > 50000:
             collection.insert_many(buffer)
             buffer = []
     if len(buffer) != 0:
         collection.insert_many(buffer)
         buffer = []
+    # indexing after insertion is more efficient but we should be careful of duplicate indexes
+    if index is not None:
+        collection.create_index([(index, pymongo.ASCENDING)],unique=True)
