@@ -15,7 +15,7 @@
     - PostTypeId
       - 1: Question
       - 2: Answer
-    - ParentID (only present if PostTypeId is 2)
+    - ParentId (only present if PostTypeId is 2)
     - AcceptedAnswerId (only present if PostTypeId is 1)
     - Score
     - ViewCount

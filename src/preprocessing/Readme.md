@@ -44,3 +44,24 @@ arguments:
   -f FILES_LIST [FILES_LIST ...], --files-list FILES_LIST [FILES_LIST ...]
                         List of the files to be parsed and added to db
 ```
+
+
+## generate_small_sample.py
+
+Generates small sets for development from mongo database
+
+#### Run:
+
+```
+usage: generate_small_sample.py [-h] -i INPUT_DATABASE [-o OUTPUT_DATABASE]
+                                [-s SAMPLE_NUMBER]
+
+arguments:
+  -h, --help            show this help message and exit
+  -i INPUT_DATABASE, --input-database INPUT_DATABASE
+                        input database name
+  -o OUTPUT_DATABASE, --output-database OUTPUT_DATABASE
+                        output database name
+  -s SAMPLE_NUMBER, --sample-number SAMPLE_NUMBER
+                        Number of main samples to be in the set
+```

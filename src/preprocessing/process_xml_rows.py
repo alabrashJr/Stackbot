@@ -1,4 +1,4 @@
-from parsers import xml_to_json, xml_to_csv
+from parsing import xml_to_json, xml_to_csv
 import argparse
 import sys
 
