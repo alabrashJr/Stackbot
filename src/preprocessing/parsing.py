@@ -1,5 +1,6 @@
 from xml import etree
 from xml.etree import ElementTree
+from itertools import islice
 import json
 import csv
 import pymongo
@@ -28,6 +29,17 @@ class StreamArray(list):
         be parsed
         """
         return self._len
+
+def get_chunks(iterable, max_size):
+    """Yields chunks from iterable with given max_size"""
+    sourceiter = iter(iterable)
+    while True:
+        batchiter = islice(sourceiter, max_size)
+        chunk = [x for x in batchiter]
+        if len(chunk) != 0:
+            yield chunk
+        else:
+            return
 
 def attributes_to_dict(line):
     """Parses xml row into python dict"""
@@ -68,19 +80,11 @@ def xml_to_csv(xmlfile, outfile, list_of_headers):
         for row in iterate_over_xml(xmlfile):
             writer.writerow(row)
 
-def xml_to_collection(xml_file, db, collection_name, index=None):
+def xml_to_collection(xml_file, db, collection_name, chunk_size=1000, index=None):
     """Reads xml rows from xml files and add them to mongodb collection"""
     collection = db[collection_name]
-    # OPTIMIZE: use batches
-    buffer = []
-    for row in iterate_over_xml(xml_file):
-        buffer.append(row)
-        if len(buffer) > 50000:
-            collection.insert_many(buffer)
-            buffer = []
-    if len(buffer) != 0:
-        collection.insert_many(buffer)
-        buffer = []
-    # indexing after insertion is more efficient but we should be careful of duplicate indexes
+    for chunk in get_chunks(iterate_over_xml(xml_file), chunk_size):
+        collection.insert_many(chunk)
+    # indexing after insertion is more efficient, but we should be careful of duplicate indexes
     if index is not None:
         collection.create_index([(index, pymongo.ASCENDING)],unique=True)
