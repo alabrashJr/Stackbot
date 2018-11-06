@@ -75,8 +75,10 @@ if __name__ == '__main__':
         for i in range(sample_num):
             temp_post = get_random_question(posts_collection, 70000000)
             post_ids.add(temp_post['Id'])
+            tags_list = remove_tags(temp_post.get('Tags'))
+            associated_tags += tags_list
+            temp_post['Tags'] = tags_list
             batch.append(temp_post)
-            associated_tags += remove_tags(temp_post.get('Tags'))
             i += 1
             if i > batch_size:
                 out_posts_collection.insert_many(batch)
@@ -122,6 +124,13 @@ if __name__ == '__main__':
         out_comments_collection.create_index([('Id', pymongo.ASCENDING)],unique=True)
         out_postlinks_collection.create_index([('Id', pymongo.ASCENDING)],unique=True)
         out_tags_collection.create_index([('Id', pymongo.ASCENDING)],unique=True)
+
+        # Indexing by other fields
+        out_tags_collection.create_index([('TagName', pymongo.ASCENDING)], unique=True)
+        out_comments_collection.create_index([('PostId', pymongo.ASCENDING)])
+        out_posts_collection.create_index([('ParentId', pymongo.ASCENDING)])
+        out_postlinks_collection.create_index([('PostId', pymongo.ASCENDING)])
+        out_postlinks_collection.create_index([('RelatedPostId', pymongo.ASCENDING)])
 
     except Exception as e:
         print(e)
