@@ -20,17 +20,6 @@ def get_random_question(collection, max_id):
         return None
 get_random_question.rand_ints = []
 
-def remove_tags(line):
-    """Parses tags from posts to list of strings"""
-    if line is None:
-        return []
-    tags = line.split('><')
-    if len(tags) == 0:
-        return []
-    tags[0] = tags[0][1:]
-    tags[-1] = tags[-1][:-1]
-    return tags
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generates small sets for development from mongo database')
     parser.add_argument('-i', '--input-database', required=True,
@@ -75,9 +64,9 @@ if __name__ == '__main__':
         for i in range(sample_num):
             temp_post = get_random_question(posts_collection, 70000000)
             post_ids.add(temp_post['Id'])
-            tags_list = remove_tags(temp_post.get('Tags'))
-            associated_tags += tags_list
-            temp_post['Tags'] = tags_list
+            tags_list = temp_post.get('Tags')
+            if tags_list is not None:
+                associated_tags += tags_list
             batch.append(temp_post)
             i += 1
             if i > batch_size:

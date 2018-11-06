@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from parsing import xml_to_collection
+from parsing import xml_to_collection, parse_tags
 import pymongo
 import argparse
 
@@ -19,3 +19,12 @@ if __name__ == '__main__':
     for file in args['files_list']:
         print('Creating collection with name', file[:file.rfind('.')], 'from', args['files_path'] + file)
         xml_to_collection(args['files_path'] + file, db, file[:file.rfind('.')], index='Id')
+    # Special for Stack overflow dump
+    db.Tags.create_index([('TagName', pymongo.ASCENDING)], unique=True)
+    db.Comments.create_index([('PostId', pymongo.ASCENDING)])
+    db.Posts.create_index([('ParentId', pymongo.ASCENDING)])
+    db.PostLinks.create_index([('PostId', pymongo.ASCENDING)])
+    db.PostLinks.create_index([('RelatedPostId', pymongo.ASCENDING)])
+    if 'Posts' in db.list_collection_names():
+        for post in db.Posts.find({'PostTypeId': '1'}):
+            db.update_one({'_id':post['_id']}, { '$set': { 'Tags': parse_tags(post['Tags']) } })

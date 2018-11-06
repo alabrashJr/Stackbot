@@ -52,6 +52,17 @@ def attributes_to_dict(line):
         print('Error encountered while trying to parse: ',line)
     return ret
 
+def parse_tags(line):
+    """Parses tags from posts to list of strings"""
+    if line is None:
+        return []
+    tags = line.split('><')
+    if len(tags) == 0:
+        return []
+    tags[0] = tags[0][1:]
+    tags[-1] = tags[-1][:-1]
+    return tags
+
 def iterate_over_xml(xmlfile):
     """Iterates over xml files rows and yields dict of rows attributes"""
     doc = ElementTree.iterparse(xmlfile, events=('start', 'end'))
