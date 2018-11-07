@@ -27,4 +27,4 @@ if __name__ == '__main__':
     db.PostLinks.create_index([('RelatedPostId', pymongo.ASCENDING)])
     if 'Posts' in db.list_collection_names():
         for post in db.Posts.find({'PostTypeId': '1'}):
-            db.update_one({'_id':post['_id']}, { '$set': { 'Tags': parse_tags(post['Tags']) } })
+            db.Posts.update_one({'_id':post['_id']}, { '$set': { 'Tags': parse_tags(post['Tags']) } })

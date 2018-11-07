@@ -85,6 +85,7 @@ if __name__ == '__main__':
                 related_posts.add(postlink['RelatedPostId'])
 
         # append related posts to output db post collection
+        related_posts = related_posts.difference(post_ids)
         related_posts_cursor = posts_collection.find({'Id': {'$in': list(related_posts) } }, projection={ '_id': 0 })
         for chunk in get_chunks(related_posts_cursor, batch_size):
             out_posts_collection.insert_many(chunk)
@@ -109,7 +110,7 @@ if __name__ == '__main__':
             out_tags_collection.insert_many(chunk)
 
         # Indexing by Id
-        out_posts_collection.create_index([('Id', pymongo.ASCENDING)],unique=True)
+        out_posts_collection.create_index([('Id', pymongo.ASCENDING)],unique=True, )
         out_comments_collection.create_index([('Id', pymongo.ASCENDING)],unique=True)
         out_postlinks_collection.create_index([('Id', pymongo.ASCENDING)],unique=True)
         out_tags_collection.create_index([('Id', pymongo.ASCENDING)],unique=True)
